@@ -53,11 +53,18 @@ class Multi(Expr):
 # the unit tests 1&2.
 @dataclass
 class Div(Expr):
-    raise NotImplementedError('TODO: Your code here!') 
+    left: Expr
+    right: Expr
+
+    def __str__(self):
+        return f"{self.left} / {self.right}"
 
 @dataclass
 class Par(Expr):
-    raise NotImplementedError('TODO: Your code here!') 
+    expr: Expr
+
+    def __str__(self):
+        return f"({self.expr})"
 
 
 
@@ -70,7 +77,14 @@ def eval_value(e: Expr) -> [int| float]:
             return value
         case Add(left, right):
             return eval_value(left) + eval_value(right)
-    raise NotImplementedError('TODO: Your code here!') 
+        case Minus(left, right):
+            return eval_value(left) - eval_value(right)
+        case Multi(left, right):
+            return eval_value(left) * eval_value(right)
+        case Div(left, right):
+            return eval_value(left) / eval_value(right)
+        case Par(expr):
+            return eval_value(expr)
 
 # 3 * 4 + 10 / 2
 test_case_1 = Add(
