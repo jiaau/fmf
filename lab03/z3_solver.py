@@ -63,14 +63,17 @@ solve(F)
 #
 # Exercise 1-1:
 # Try to find solution that satisfies proposition: (P /\ Q) \/ R
-raise NotImplementedError('TODO: Your code here!') 
-
+print("Exercise 1-1:")
+P, Q, R = Bools('P Q R')
+F = Or(And(P, Q), R)
+solve(F)
 
 # Exercise 1-2:
 # Try to find solution that satisfies proposition: P \/ (Q \/ R)
-raise NotImplementedError('TODO: Your code here!') 
-
-
+print("Exercise 1-2:")
+P, Q, R = Bools('P Q R')
+F = Or(P, Or(Q, R))
+solve(F)
 
 ###########################################################
 # In Exercise 1-1 you've see the basic usage of z3 for describing propositions.
@@ -91,13 +94,18 @@ solve(F)
 # Exercise 1-3:
 # Consider proposition (P \/ Q) /\ (Q /\ R) /\ (P /\ ~R). Complete below src,
 # Z3 will show you that no solution can satisfy it.
-raise NotImplementedError('TODO: Your code here!') 
-
+print("Exercise 1-3:")
+P, Q, R = Bools('P Q R')
+F = And(Or(P, Q), And(Q, R), And(P, Not(R)))
+solve(F)
 
 # Exercise 1-4
 # Try to solve proposition
 # (P /\ ~S /\ R) /\ (R /\ ( ~P \/ (S /\ ~Q)))
-raise NotImplementedError('TODO: Your code here!') 
+print("Exercise 1-4:")
+P, Q, R, S = Bools('P Q R S')
+F = And(And(P, Not(S), R), And(R, Or(Not(P), And(S, Not(Q)))))
+solve(F)
 
 ###########################################################
 # You may notice that some problems in Exercise 1 has more than one solutions
@@ -159,8 +167,26 @@ solve(F)
 # Now you have know how to add constraint to solver to get different solutions
 # from z3. Try to get **all solutions** that satisfy the proposition in
 # Exercise 1-1: (P /\ Q) \/ R
-raise NotImplementedError('TODO: Your code here!') 
-
+print("Exercise 1-5:")
+P, Q, R = Bools('P Q R')
+F = Or(And(P, Q), R)
+solve(F)
+# [R = False, Q = True, P = True]
+F = And(F, Not(And(Not(R), Q, P)))
+solve(F)
+# [R = True, Q = True, P = True]
+F = And(F, Not(And(R, Q, P)))
+solve(F)
+# [R = True, Q = False, P = False]
+F = And(F, Not(And(R, Not(Q), Not(P))))
+solve(F)
+# [R = True, Q = False, P = True]
+F = And(F, Not(And(R, Not(Q), P)))
+solve(F)
+# [R = True, Q = True, P = False]
+F = And(F, Not(And(R, Q, Not(P))))
+solve(F)
+# no solution
 
 # We can automate the above process, for this, we should expose
 # more internal capability of Z3. Consider our first example again:
@@ -202,6 +228,7 @@ print(solver.model())
 # Exercise 1-6
 # Now it's your turn, let's wrap all these facility into a nice function:
 # Read and understand the src, then complete the lost part.
+print("Exercise 1-6:")
 def sat_all(props, f):
     """Get all solutions of given proposition set props that satisfy f
 
@@ -226,7 +253,8 @@ def sat_all(props, f):
 
             block.append(new_prop)
 
-        raise NotImplementedError('TODO: Your code here!') 
+        solver.add(Not(And(block)))
+        # raise NotImplementedError('TODO: Your code here!') 
 
     print("the given proposition: ", f)
     print("the number of solutions: ", len(result))
