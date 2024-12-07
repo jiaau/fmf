@@ -99,7 +99,14 @@ def to_z3(prop: Prop) -> z3.BoolRef:
             return True
         case PFalse():
             return False
-        raise NotImplementedError('TODO: Your code here!') 
+        case PAnd(left, right):
+            return And(to_z3(left), to_z3(right))
+        case POr(left, right):
+            return Or(to_z3(left), to_z3(right))
+        case PImplies(left, right):
+            return Implies(to_z3(left), to_z3(right))
+        case PNot(p):
+            return Not(to_z3(p))
 
 
 
@@ -114,7 +121,22 @@ def to_z3(prop: Prop) -> z3.BoolRef:
 #   C(P->Q)   = ~C(P) \/ C(Q)
 
 def ie(prop: Prop) -> Prop:
-    raise NotImplementedError('TODO: Your code here!') 
+    match prop:
+        case PVar(var):
+            return prop
+        case PTrue():
+            return prop
+        case PFalse():
+            return prop
+        case PAnd(left, right):
+            return PAnd(ie(left), ie(right))
+        case POr(left, right):
+            return POr(ie(left), ie(right))
+        case PImplies(left, right):
+            return POr(PNot(ie(left)), ie(right))
+        case PNot(p):
+            return PNot(ie(p))
+        # raise NotImplementedError('TODO: Your code here!') 
 
 
 # Exercise 3-3: try to implement the `nnf()` method to convert the
@@ -129,11 +151,25 @@ def ie(prop: Prop) -> Prop:
 #   C(~(P\/Q)) = C(~P) /\ C(~Q)
 def nnf(prop_without_implies: Prop) -> Prop:
     match prop_without_implies:
-        case PImplies(left, right):
-            raise Exception("Proposition should not contain implication in NNF conversion")
+        case PVar(var):
+            return prop_without_implies
+        case PTrue():
+            return prop_without_implies
+        case PFalse():
+            return prop_without_implies
+        case PAnd(left, right):
+            return PAnd(nnf(left), nnf(right))
         case POr(left, right):
             return POr(nnf(left), nnf(right))
-        raise NotImplementedError('TODO: Your code here!') 
+        case PNot(PNot(p)):
+            return nnf(p)
+        case PNot(PAnd(left, right)):
+            return POr(nnf(PNot(left)), nnf(PNot(right)))
+        case PNot(POr(left, right)):
+            return PAnd(nnf(PNot(left)), nnf(PNot(right)))
+        case PNot(p):
+            return PNot(nnf(p))
+        # raise NotImplementedError('TODO: Your code here!')
 
 
 # Exercise 3-4: try to implement the `cnf()` method to convert the
@@ -149,8 +185,14 @@ def nnf(prop_without_implies: Prop) -> Prop:
 #   D(P, Q)        = P \/ Q
 def cnf(nnf_prop: Prop) -> Prop:
     def cnf_d(left: Prop, right: Prop) -> Prop:
-        raise NotImplementedError('TODO: Your code here!') 
-            
+        match (left, right):
+            case (PAnd(l1, l2), _):
+                return PAnd(cnf_d(l1, right), cnf_d(l2, right))
+            case (_, PAnd(r1, r2)):
+                return PAnd(cnf_d(left, r1), cnf_d(left, r2))
+            case _:
+                return POr(left, right)
+                
     match nnf_prop:
         case PAnd(left, right):
             return PAnd(cnf(left), cnf(right))
