@@ -23,15 +23,31 @@ def four_queen():
 
     # Challenge: add constraints which describe each column has just one queen
     # constraint 2: each column has just one queen:
-    raise NotImplementedError('TODO: Your code here!') 
+    for i in range(N):
+        columns = []
+        for j in range(N):
+            current_column = []
+            current_column.append(board[j][i])
+            for k in range(N):
+                if k != i:
+                    current_column.append(Not(board[j][k]))
+            columns.append(And(current_column))
+        solver.add(Or(columns))
+    # raise NotImplementedError('TODO: Your code here!') 
         
     # Challenge: add constraints which describe each diagonal has at most one queen
     # constraint 3: each diagonal has at most one queen:
-    raise NotImplementedError('TODO: Your code here!') 
+    for d in range(-N + 1, N):
+        diagonal = [board[i][j] for i in range(N) for j in range(N) if i - j == d]
+        solver.add(AtMost(*diagonal, 1))
+    # raise NotImplementedError('TODO: Your code here!') 
     
     # Challenge: add constraints which describe each anti-diagonal has at most one queen
     # constraint 4: each anti-diagonal has at most one queen:
-    raise NotImplementedError('TODO: Your code here!') 
+    for s in range(2 * N - 1):
+        anti_diagonal = [board[i][s - i] for i in range(N) if 0 <= s - i < N]
+        solver.add(AtMost(*anti_diagonal, 1))
+    # raise NotImplementedError('TODO: Your code here!') 
 
     count = 0
     while solver.check() == sat:
