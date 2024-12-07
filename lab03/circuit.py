@@ -21,7 +21,42 @@ from z3 import *
 # First we convert it into proposition
 def circuit_layout():
     a, b, c, d = Bools('a b c d')
-    raise NotImplementedError('TODO: Your code here!') 
+    F1 = And(a, b)
+    F2 = And(Not(c), F1)
+    F3 = And(d, F1)
+    F = Or(F2, F3)
+    def sat_all(props, f):
+        solver = Solver()
+        solver.add(f)
+        result = []
+        while solver.check() == sat:
+            m = solver.model()
+            result.append(m)
+            block = []
+            for prop in props:
+                prop_is_true = m.eval(prop, model_completion=True)
+
+                if prop_is_true:
+                    new_prop = prop
+                else:
+                    new_prop = Not(prop)
+
+                block.append(new_prop)
+
+            solver.add(Not(And(block)))
+            # raise NotImplementedError('TODO: Your code here!') 
+
+        print("the given proposition: ", f)
+        print("the number of solutions: ", len(result))
+
+        def print_model(m):
+            print(sorted([(d, m[d]) for d in m], key=lambda x: str(x[0])))
+
+        for m in result:
+            print_model(m)
+        
+    sat_all([a, b, c, d], F)
+    # raise NotImplementedError('TODO: Your code here!') 
 
 
 if __name__ == '__main__':
