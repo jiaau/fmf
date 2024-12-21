@@ -118,11 +118,17 @@ def to_ssa_func(f: Function) -> Function:
 ###############################################
 # Generate Z3 constraints:
 def gen_cons_exp(exp: Exp) -> BoolRef:
+    bop_map = {
+        '+': 'add',
+        '-': 'sub',
+        '*': 'mul',
+        '/': 'div'
+    }
     match exp:
         case ExpVar(var):
             return Const(var, DeclareSort('S'))
         case ExpBop(left, right, bop):
-            func_name = "f_" + bop
+            func_name = "f_" + bop_map[bop]
             left = gen_cons_exp(left)
             right = gen_cons_exp(right)
             return z3.Function(func_name,

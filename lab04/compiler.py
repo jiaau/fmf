@@ -55,7 +55,11 @@ def translation_validation(calc_func: calc.Function, tac_func: tac.Function) -> 
 
     solver = Solver()
 
-    raise NotImplementedError('TODO: Your code here!') 
+    # raise NotImplementedError('TODO: Your code here!') 
+    calc_ret = (calc_cons[-1].children())[-1]
+    tac_ret = (tac_cons[-1].children())[0]
+    F = Implies(And(calc_cons + tac_cons), calc_ret == tac_ret)
+    solver.add(Not(F))
     return solver
 
 
