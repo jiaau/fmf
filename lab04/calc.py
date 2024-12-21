@@ -50,15 +50,28 @@ class Function:
 ###############################################
 # to pretty print a program
 def pp_exp(e: Exp):
-    raise NotImplementedError('TODO: Your code here!') 
+    match e:
+        case ExpVar(x):
+            return x
+        case ExpBop(left, right, bop):
+            return f"({pp_exp(left)} {bop} {pp_exp(right)})"
+    # raise NotImplementedError('TODO: Your code here!') 
 
 def pp_stm(s: Stm):
-    raise NotImplementedError('TODO: Your code here!') 
+    match s:
+        case StmAssign(x, e):
+            return f"{x} = {pp_exp(e)};"
+    # raise NotImplementedError('TODO: Your code here!') 
 
 def pp_func(f):
     match f:
         case Function(name, args, stms, ret):
-            raise NotImplementedError('TODO: Your code here!') 
+            print(f"{name}({', '.join(args)}){'{'}")
+            for stm in stms:
+                print(f"    {pp_stm(stm)}")
+            print(f"    return {pp_exp(ret)}")
+            print("}")
+            # raise NotImplementedError('TODO: Your code here!') 
 
 def pp(f: Function):
     pp_func(f)
