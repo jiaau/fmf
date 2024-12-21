@@ -35,22 +35,20 @@ int power3_new(int in){
 
 
 # Define the power3 program
-in_var = Int('in')
-i = Int('i')
-out_a = Int('out_a')
-P1 = And(out_a == in_var, out_a == out_a * in_var, out_a == out_a * in_var)
+S = DeclareSort('S')
 
-# Define the power3_new program
-in_var = Int('in')
-out_b = Int('out_b')
-P2 = out_b == (in_var * in_var) * in_var
+_in, out_a_0, out_a_1, out_a_2, out_b = Consts('_in out_a_0 out_a_1 out_a_2 out_b', S)
 
-# Define the equivalence
-equiv = Implies(And(P1, P2), out_a == out_b)
+f = Function('f', S, S, S)
+
+P1 = And(out_a_0 == _in, out_a_1 == f(out_a_0, _in), out_a_2 == f(out_a_1, _in))
+P2 = And(out_b == f(f(_in, _in), _in))
+
+F = Implies(And(P1, P2), out_a_2 == out_b)
 
 # Create a solver and add the equivalence
 solver = Solver()
-solver.add(Not(equiv))
+solver.add(Not(F))
 
 # Check if the equivalence holds
 if solver.check() == unsat:
