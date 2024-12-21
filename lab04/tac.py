@@ -47,13 +47,28 @@ class Function:
 ###############################################
 # pretty printer
 def pp_exp(e: Exp):
-    raise NotImplementedError('TODO: Your code here!') 
+    match e:
+        case ExpVar(x):
+            return x
+        case ExpBop(x, y, bop):
+            return f"{x} {bop} {y}"
+    # raise NotImplementedError('TODO: Your code here!') 
 
 def pp_stm(s: Stm):
-    raise NotImplementedError('TODO: Your code here!') 
+    match s:
+        case StmAssign(x, e):
+            return f"{x} = {pp_exp(e)};"
+    # raise NotImplementedError('TODO: Your code here!') 
 
 def pp_func(f: Function):
-    raise NotImplementedError('TODO: Your code here!') 
+    match f:
+        case Function(name, args, stms, ret):
+            print(f"{name}({', '.join(args)}){'{'}")
+            for stm in stms:
+                print(f"  {pp_stm(stm)}")
+            print(f"  return {ret};")
+            print("}")
+    # raise NotImplementedError('TODO: Your code here!') 
 
 
 ###############################################
@@ -62,10 +77,23 @@ def pp_func(f: Function):
 # Exercise 7: Finish the SSA conversion function `to_ssa_stmt()`
 # take a function 'f', convert it to SSA
 def to_ssa_exp(e: Exp, var_map, fresh_var) -> Exp:
-    raise NotImplementedError('TODO: Your code here!') 
+    match e:
+        case ExpVar(x):
+            return ExpVar(var_map[x])
+        case ExpBop(x, y, bop):
+            return ExpBop(var_map[x],
+                          var_map[y],
+                          bop)
+    # raise NotImplementedError('TODO: Your code here!') 
 
 def to_ssa_stm(s: Stm, var_map, fresh_var) -> Stm:
-    raise NotImplementedError('TODO: Your code here!') 
+    match s:
+        case StmAssign(x, e):
+            new_e = to_ssa_exp(e, var_map, fresh_var)
+            new_var = next(fresh_var)
+            var_map[x] = new_var
+            return StmAssign(new_var, new_e)
+    # raise NotImplementedError('TODO: Your code here!') 
 
 def to_ssa_func(f: Function) -> Function:
     var_map = {arg: arg for arg in f.args}
@@ -85,16 +113,37 @@ def to_ssa_func(f: Function) -> Function:
 # constraints form TAC statements
 # Generate Z3 constraints:
 def gen_con_exp(e: Exp) -> BoolRef:
-    raise NotImplementedError('TODO: Your code here!') 
+    bop_map = {
+        '+': 'add',
+        '-': 'sub',
+        '*': 'mul',
+        '/': 'div'
+    }
+    match e:
+        case ExpVar(var):
+            return Const(var, DeclareSort('S'))
+        case ExpBop(left, right, bop):
+            func_name = "f_" + bop_map[bop]
+            left = Const(left, DeclareSort('S'))
+            right = Const(right, DeclareSort('S'))
+            return z3.Function(func_name,
+                            DeclareSort('S'),
+                            DeclareSort('S'),
+                            DeclareSort('S')).__call__(left, right)
+    # raise NotImplementedError('TODO: Your code here!') 
 
 def gen_cons_stm(s: Stm) -> BoolRef:
-    raise NotImplementedError('TODO: Your code here!') 
+    match s:
+        case StmAssign(x, e):
+            return Const(x, DeclareSort('S')).__eq__(gen_con_exp(e))
+    # raise NotImplementedError('TODO: Your code here!') 
 
 
 # Exercise 8-2: Finished the `gen_cons_stmt` function to 
 # generate constraints form TAC function 
 def gen_cons_func(func: Function) -> List[BoolRef]:
-    raise NotImplementedError('TODO: Your code here!') 
+    return [gen_cons_stm(stm) for stm in func.stms]
+    # raise NotImplementedError('TODO: Your code here!') 
 
 
 ###############################################
