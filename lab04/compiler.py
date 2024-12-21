@@ -12,12 +12,21 @@ from counter import counter
 # a compiler from Calc to Tac.
 def compile_func(f: calc.Function) -> tac.Function:
     tac_stms = []
-    fresh_var = counter(f"tmp_{f.name}")
+    fresh_var = counter(f"tac_{f.name}")
 
     # Exercise 9: Finish the compiler implementation by filling in the 
     # missing code in compile_exp()
     def compile_exp(e: calc.Exp) -> str:
-        raise NotImplementedError('TODO: Your code here!') 
+        match e:
+            case calc.ExpVar(x):
+                return x
+            case calc.ExpBop(left, right, bop):
+                tmp1 = compile_exp(left)
+                tmp2 = compile_exp(right)
+                tmp = next(fresh_var)
+                tac_stms.append(tac.StmAssign(tmp, tac.ExpBop(tmp1, tmp2, bop)))
+                return tmp
+        # raise NotImplementedError('TODO: Your code here!') 
 
     def compile_stm(s: calc.Stm):
         match s:
@@ -73,6 +82,15 @@ class TestTV(unittest.TestCase):
         #   return _tac_f_5;
         # }
         # self.assertEqual(str(tac.to_ssa_func(self.tac_func)), res)
+        ssa_func = tac.to_ssa_func(self.tac_func)
+        ssa_name = (f"{ssa_func.name}({', '.join(ssa_func.args)}){'{'}") 
+        ssa_stm = ""
+        for stm in ssa_func.stms:
+                ssa_stm += (f"\n\t{tac.pp_stm(stm)}")
+        ssa_return = (f"\n\treturn {ssa_func.ret};{'\n}'}")
+        ssa_func_str = ssa_name+ssa_stm+ssa_return
+        self.assertEqual(ssa_func_str, res)
+
 
     def test_tv(self):
         solver = translation_validation(calc.sample_f, self.tac_func)
