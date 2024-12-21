@@ -58,6 +58,7 @@ F2 = And(z == g(f(x1, y1), f(x2, y2)))
 F = Implies(F1, F2)
 print("the solution is:")
 solve(Not(F))
+# no solution
 
 # Let's try another example
 # the constraint:
@@ -66,3 +67,7 @@ x1, x2, x3, x4, x5 = Consts('x1 x2 x3 x4 x5', S)
 solve(x1 == x2, x2 == x3, x4 == x5, x5 != x1, f(x1) != f(x3))
 # what's Z3's output? And why that output?
 
+# answer: no solution. 
+# From x1 == x2 and x2 == x3, we can deduce x1 == x3.
+# Given x1 == x3, the constraint f(x1) != f(x3) becomes f(x1) != f(x1), 
+# which is a contradiction because a function applied to the same input should yield the same output.
