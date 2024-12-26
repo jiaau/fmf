@@ -88,7 +88,15 @@ x, y = Ints('x y')
 # @Exercise 3: please write src to check the above constraints, make sure
 # your src should output some like "[x = 5, y = 3]'.
 # Please add your code here:
-TODO()
+solver = Solver()
+solver.add(x + y == 8, x - y == 2)
+res = solver.check()
+print("result for problem 3:")
+if res == sat:
+    model = solver.model()
+    print(model)
+else:
+    print(res)
 
 
 
