@@ -55,6 +55,7 @@ else:
 # @Exercise 1: run the above src and check the result, is the result correct?
 # you don't need to write any src, just make sure you understand the output.
 
+# correct.
 
 # Of course, not all constraints are satisfiable, given two variables "x" and "y" on
 # domain R, consider the following constraints:
@@ -65,7 +66,15 @@ x, y = Reals('x y')
 # @Exercise 2: For the above constraints, please write down src that creating the
 # solver and checking these constraints. Make sure your src outputs "unsat".
 # Please add your code here:
-TODO()
+solver = Solver()
+solver.add(x + y == 0.8, x + y == 0.2)
+res = solver.check()
+print("result for problem 2:")
+if res == sat:
+    model = solver.model()
+    print(model)
+else:
+    print(res)
 
 
 
