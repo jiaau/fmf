@@ -148,7 +148,13 @@ print_model(res, model)
 x, y = Reals('x, y')
 cons = [x + y == 8, x - y == 1]
 # Please add your code here:
-TODO()
+print("result for problem 4:")
+res, model = check_cons(cons)
+print_model(res, model)
+x, y = Ints('x, y')
+cons = [x + y == 8, x - y == 1]
+res, model = check_cons(cons)
+print_model(res, model)
 
 
 #########################################
