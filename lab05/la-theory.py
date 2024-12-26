@@ -217,7 +217,8 @@ assert (check_zero_normal(l3))
 # @exercise 5: why the above constraints can guarantee that there is
 # one 0 in the input list of integers?
 # Please add your code here:
-TODO()
+
+# Counterfactual: If the list is all non-zero, the above equation is necessarily unsolvable.
 
 
 # Let's continue to turn the above constraints into src;
@@ -240,7 +241,9 @@ def check_zero_la(l):
     # and store it in the "cons_exp" variable.
     # Make sure your src passes all the following unit test.
     # Please add your code here:
-    TODO()
+    for i in range(len(vars)):
+        cons_exp.append(vars[i] * l[i])
+    cons_exp = [sum(cons_exp) == 0]
 
     # check these constraints:
     res, model = check_cons(cons_0_or_1 + cons_sum + cons_exp)
@@ -283,7 +286,11 @@ else:
 # on two real numbers x and y, is unsat:
 #   x*x + y*y < 0
 # Please add your code here:
-TODO()
+x, y = Reals('x y')
+cons = [x*x + y*y < 0]
+res, model = check_cons(cons)
+print("result for problem 7:")
+print_model(res, model)
 
 
 
@@ -312,7 +319,10 @@ TODO()
 # satisfiability of the equation (3).
 x, p, q = Ints('x p q')
 # Please add your code here:
-TODO()
+cons = [x*q == p, x == q, q != 0, p == 2]
+res, model = check_cons(cons)
+print("result for problem 8:")
+print_model(res, model)
 
 
 
