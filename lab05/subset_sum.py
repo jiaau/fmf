@@ -48,7 +48,10 @@ def subset_sum_la(target_set: List[int]) -> Tuple[bool, List[int]]:
     # the following constraint into the solver.
     #       \sum_i flags[i]*target_set[i] = 0
     # Please add your code here:
-    TODO()
+    cons_exp = []
+    for i in range(len(target_set)):
+        cons_exp.append(flags[i] * target_set[i])
+    solver.add(sum(cons_exp) == 0)
 
 
     start = time.time()
@@ -105,5 +108,28 @@ if __name__ == '__main__':
     # values, say, 200, 2000, 20000, 200000, ...
     # what's your observation? What conclusion you can draw from these data?
     # Please add your code here:
-    TODO()
+    print("max_nums = 20")
+    subset_sum_dp(large_set)
+    print(subset_sum_la(large_set))
+    print("max_nums = 200")
+    max_nums = 200
+    large_set = gen_large_test(max_nums)
+    # subset_sum_dp(large_set)
+    print(subset_sum_la(large_set))
 
+'''
+time used in DP: 0.000005s
+time used in LA: 0.003499s
+(True, [-3, -2, 5])
+max_nums = 20
+time used in DP: 0.040007s
+time used in LA: 0.012928s
+(True, [1, -1])
+max_nums = 200
+time used in LA: 0.072360s
+(True, [1, -1])
+'''
+
+# when max_nums = 6, the DP algorithm is faster than the LA algorithm.
+# however, when max_nums becomes larger, the LA algorithm is faster than the DP algorithm.
+# the DP algorithm cannot handle large numbers of elements in the list, while the LA algorithm can handle large numbers of elements in the list. 
