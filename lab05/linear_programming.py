@@ -59,7 +59,13 @@ def lp_exercise():
     # by using LP in Z3
     # Your src here:
     # Please add your code here:
-    TODO()
+    # TODO()
+    x, y, z = Reals("x y z")
+    cons = [x - y >= 2.1, x + z <= 5.5, y - z <= 1.1]
+    opt.add(cons)
+    opt.maximize(x + y + z)
+    if opt.check() == sat:
+        print(opt.model())
 
 
 
