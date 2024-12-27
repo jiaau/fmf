@@ -44,7 +44,25 @@ def n_queen_la(board_size: int, verbose: bool = False) -> int:
     #   each diagonal has at most 1 queen,
     #   each anti-diagonal has at most 1 queen.
     # Please add your code here:
-    TODO()
+    row_cons = [sum(row) == 1 for row in board]
+    col_cons = [sum([row[col] for row in board]) == 1 for col in range(n)]
+    diag_cons = []
+    for d in range(-n + 1, n):
+        diag = []
+        for i in range(n):
+            j = i + d
+            if 0 <= j < n:
+                diag.append(board[i][j])
+        diag_cons.append(sum(diag) <= 1)
+    anti_diag_cons = []
+    for d in range(0, 2 * n - 1):
+        diag = []
+        for i in range(n):
+            j = d - i
+            if 0 <= j < n:
+                diag.append(board[i][j])
+        anti_diag_cons.append(sum(diag) <= 1)
+    solver.add(row_cons + col_cons + diag_cons + anti_diag_cons)
 
 
     # count the number of solutions
@@ -143,12 +161,34 @@ if __name__ == '__main__':
     # by changing the value of the chessboard size to other values,
     # which one is faster? What conclusion you can draw from the result?
     # Please add your code here:
-    TODO()
+    n_queen_bt(8)
+    '''
+    n_queen_la solve 8-queens by 1.266936s
+    n_queen_bt solve 8-queens by 0.005623s
+
+    n_queen_la solve 10-queens by 18.600679s
+    n_queen_bt solve 10-queens by 0.143121s
+
+    n_queen_la solve 16-queens by 212.775954s
+    ...
+    '''
+
+    # when the board size is small, the backtracking algorithm is faster than the LA algorithm.
+    # however, when the board size is large, the LA algorithm is faster than the backtracking algorithm.
+    # the conclusion is that the LA algorithm is more efficient than the backtracking algorithm when the board size is large.
 
 
     # @Exercise 13: Try to compare the efficiency of n_queen_la_opt() method
     # with your n_queen_la() method.
     # What's your observation? What conclusion you can draw?
     # Please add your code here:
-    TODO()
+    n_queen_la_opt(8)
+    '''
+    n_queen_la solve 8-queens by 1.270984s
+    n_queen_la_opt solve 8-queens by 0.119828s
+    '''
+    # the n_queen_la_opt() method is more efficient than the n_queen_la() method.
+    # the reason is that the n_queen_la_opt() method uses a more efficient way to represent the queens on the chessboard.
+    # the n_queen_la_opt() method uses a single integer to represent each queen, 
+    # while the n_queen_la() method uses a 0-1 integer variable to represent each position of the chessboard.
 
