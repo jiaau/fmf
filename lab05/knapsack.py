@@ -94,8 +94,11 @@ def zero_one_knapsack_lp(weights, values, cap, verbose=False):
     #   \sum_i values[i] * flags[i]
     # Your code here:
     # Please add your code here:
-    TODO()
-
+    # TODO()
+    n = len(weights)
+    cons = [Sum([weights[i] * flags[i] for i in range(n)]) <= cap]
+    solver.add(cons)
+    solver.maximize(Sum([values[i] * flags[i] for i in range(n)]))
 
     start = time.time()
     result = solver.check()
@@ -128,8 +131,15 @@ def complete_knapsack_lp(weights, values, cap, verbose=False):
     #   \sum_i values[i] * flags[i]
     # Your src here:
     # Please add your code here:
-    TODO()
+    # TODO()
+    n = len(weights)
+    flags = [Int(f"x_{i}") for i in range(n)]
 
+    for flag in flags:
+        solver.add(flag >= 0)
+    cons = [Sum([weights[i] * flags[i] for i in range(n)]) <= cap]
+    solver.add(cons)
+    solver.maximize(Sum([values[i] * flags[i] for i in range(n)]))
 
     start = time.time()
     result = solver.check()
@@ -200,7 +210,15 @@ class TestKnapsack(unittest.TestCase):
         # what's your observation? What conclusion you can draw from these data?
         # Your code here:
         # Please add your code here:
-        TODO()
+        # TODO()
+        res_dp = zero_one_knapsack_dp(W, V, C)
+        res_lp = zero_one_knapsack_lp(W, V, C)
+        self.assertEqual(res_dp, res_lp[1])
+        '''
+        .zero_one_knapsack_dp solve 24 items by time 1.202460s
+        zero_one_knapsack_lp solve 24 items by time 741.651747s
+        '''
+        # the conclusion is that the dynamic programming algorithm is more efficient than the ILP algorithm when the data is large.
 
         
         
