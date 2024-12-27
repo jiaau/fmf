@@ -104,7 +104,8 @@ def lr_training(xs, ys):
     # to generate the target expression which will be minimized
     # Your code here:
     # Please add your code here:
-    TODO()
+    # TODO()
+    exps = [(ys[i] - (k*xs[i] + b)) * (ys[i] - (k*xs[i] + b)) for i in range(len(xs))]
 
 
     # double check the expression is right
@@ -156,6 +157,20 @@ if __name__ == '__main__':
     # results? What conclusion you can draw from the result?
     # Your code here:
     # Please add your code here:
-    TODO()
+    # TODO()
+    import numpy as np
+    from sklearn.linear_model import LinearRegression
 
-
+    def sklearn_lr(xs, ys):
+        reg = LinearRegression().fit(np.array(list(zip(xs, [0] * len(xs)))), ys)
+        return reg.coef_[0], reg.intercept_
+    k, b = sklearn_lr(xs, ys)
+    print(f"the linear function is:\n y = {k}*x {'+' if b >= 0 else '-'} {abs(b)}")
+    '''
+    the linear function is:
+    y = 2*x - 1
+    the linear function is:
+    y = 2.0*x - 1.0
+    '''
+    # the two algorithms produce the same results
+    # the conclusion is that the two algorithms are equivalent
