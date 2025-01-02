@@ -208,6 +208,11 @@ def invoke_java_int_average():
 
 invoke_java_int_average()
 
+# Exception in thread "main" java.lang.AssertionError: Generating a integer overflow bug!
+#         at com.assign.IntAverage.int_average(IntAverage.java:13)
+#         at com.assign.IntAverage.main(IntAverage.java:8)
+# when y = 2144323548, x = 2147477499, x + y overflow, so the result is negative,
+#  but the assert statement is z >= 0, so it throws an exception.
 
 # Joshua J. Bloch proposed the following solution to solve integer overflow problem：
 def int_average_v2(x, y):
