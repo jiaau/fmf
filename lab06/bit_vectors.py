@@ -26,6 +26,9 @@ else:
 # to yourself how the modulo semantics work here. You don't
 # need to write any src here.
 
+# number "9" is not representable using just 2 bits, the modulo semantics
+# works here, the result is 9 % 4 = 1, so the result is 1.
+# The output is: [y = 0, x = 1]
 
 
 # @Exercise 2: In this exercise, you will write a function to
