@@ -365,7 +365,21 @@ def fermat_2(x, y, z):
 # Fermat's last theorem:
 # @Exercise 12: write a function for arbitrary n:
 def fermat(x, y, z, n):
-    raise NotImplementedError('TODO: Your code here!') 
+    # raise NotImplementedError('TODO: Your code here!') 
+    cons = []
+    cons.append(x & 0xffffff00 == 0)
+    cons.append(y & 0xffffff00 == 0)
+    cons.append(z & 0xffffff00 == 0)
+    cons.append(x != 0)
+    cons.append(y != 0)
+    cons.append(z != 0)
+    xn, yn, zn = 1, 1, 1
+    while n > 0:
+        xn = xn * x
+        yn = yn * y
+        zn = zn * z
+    cons.append(xn + yn == zn)
+    return cons
 
 
 def check_fermat():
