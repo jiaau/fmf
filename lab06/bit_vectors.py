@@ -115,7 +115,8 @@ binary_search_bug()
 
 # Given two bit vectors, to compute their average:
 def int_average_v1(x, y):
-    raise NotImplementedError('TODO: Your code here!') 
+    # raise NotImplementedError('TODO: Your code here!') 
+    return (x + y) / 2
 
 
 # To compute the correct result of integer average, we've
@@ -167,9 +168,11 @@ def check_average(f, is_non_negative):
 
 # @Exercise 4: To check whether or not the above function is correct.
 # Does Z3 complain? Why or why not?
-raise NotImplementedError('TODO: Your code here!') 
+# raise NotImplementedError('TODO: Your code here!') 
 check_average(int_average_v1, True)
-
+# int_average_v1 isn't correct, it has integer overflow problem.
+# FAILED! Found a bug with non-negative input in the function: int_average_v1
+# [y = 2144323548, x = 2147477499]
 
 # Given a Java source src which accepts two parameters provided by z3,
 # that is provided by z3 after running the function check_func():
