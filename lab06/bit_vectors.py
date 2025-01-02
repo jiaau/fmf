@@ -316,8 +316,15 @@ multi_overflow()
 # For instance, for x=1, y=2, return (False, 2).
 # for x=0x80000000, y=2, return (True, 0)
 def detect_multi_overflow(x, y):
-    raise NotImplementedError('TODO: Your code here!') 
-
+    xv = x.as_signed_long()
+    yv = y.as_signed_long()
+    product_64 = xv * yv
+    truncated = product_64 & 0xffffffff
+    # interpret as signed 32-bit
+    if truncated & 0x80000000:
+        truncated -= 0x100000000
+    is_overflow = (product_64 < -2**31 or product_64 > 2**31 - 1)
+    return (is_overflow, truncated)
 
 def check_multi():
     # some unit tests
