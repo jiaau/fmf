@@ -265,7 +265,9 @@ check_average(int_average_v3, True)
 # Hacker's Delight book (page 9, section 2.5) by Henry S. Warren
 # (this is a very good book containing many delighting programming tricks).
 def int_average(x, y):
-    raise NotImplementedError('TODO: Your code here!') 
+    # raise NotImplementedError('TODO: Your code here!') 
+    t = (x & y) + ((x ^ y) >> 1)
+    return t + (LShR(t, 31) & (x ^ y))
 
 
 check_average(int_average, False)
