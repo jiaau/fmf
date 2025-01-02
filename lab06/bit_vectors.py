@@ -235,7 +235,8 @@ check_average(int_average_v2, False)
 #
 # @exercise 7: Complete the missing part to implement it.
 def int_average_v3(x, y):
-    raise NotImplementedError('TODO: Your code here!') 
+    # raise NotImplementedError('TODO: Your code here!') 
+    return (x + y) >> 1
 
 
 check_average(int_average_v3, False)
