@@ -245,6 +245,12 @@ check_average(int_average_v3, False)
 # @Exercise 8: To check whether or not the above function is correct.
 # Does Z3 complain? Why or why not?
 check_average(int_average_v3, True)
+# FAILED! Found a bug with negative input in the function: int_average_v3
+# [y = 4294965166, x = 2147485777]
+# FAILED! Found a bug with non-negative input in the function: int_average_v3
+# [y = 2147483647, x = 2147483647]
+# int_average_v3 isn't correct, x + y has integer overflow problem.
+
 
 
 # @Exercise 9: To compute the average of two arbitrary
