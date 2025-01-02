@@ -223,6 +223,11 @@ def int_average_v2(x, y):
 # Does Z3 complain? Why or why not?
 check_average(int_average_v2, False)
 
+# FAILED! Found a bug with negative input in the function: int_average_v2
+# [y = 1156844793, x = 3055129592]
+# int_average_v2 isn't correct, it has integer overflow problem.
+# is_non_negative = false, so the input can be negative, when x = 3055129592, y = 1156844793,
+# y - x gets a negative number, that means the result is overflow.
 
 # Joshua J. Bloch proposed a second solution to solve integer
 # overflow problem:
