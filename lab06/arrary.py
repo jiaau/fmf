@@ -29,8 +29,8 @@ def array_proof():
     solver = Solver()
     
     # your src here
-    raise NotImplementedError('TODO: Your code here!') 
-    
+    # raise NotImplementedError('TODO: Your code here!') 
+    solver.add(Select(Store(array, index, value), index) >= value)
     result = solver.check()
     if result == sat:
         return True, solver.model()
