@@ -98,6 +98,21 @@ check_count()
 # Java src showing above and using z3's bit-vector to
 # reproduce the bug.
 
+# the bug is in the line: int middle = (low + high) / 2;
+def binary_search_bug():
+    low, high, middle = BitVecs('low high middle', 32)
+    target = BitVec('target', 32)
+    solver = Solver()
+    solver.add(low <= high)
+    solver.add(middle == (low + high) / 2)
+    solver.add(middle == target)
+    res = solver.check()
+    if res == sat:
+        print('found an poc for integer overflow: ', solver.model())
+    else:
+        print('success!')
+binary_search_bug()
+
 # Given two bit vectors, to compute their average:
 def int_average_v1(x, y):
     raise NotImplementedError('TODO: Your code here!') 
