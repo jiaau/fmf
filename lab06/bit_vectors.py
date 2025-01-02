@@ -37,7 +37,15 @@ else:
 # BitVecVal(1, 32)   :  1
 # BitVecVal(-1, 32)  :  2
 def count_one_in_bit_vector(x):
-    raise NotImplementedError('TODO: Your code here!') 
+    # raise NotImplementedError('TODO: Your code here!') 
+    # Get the bit-width of the bit-vector
+    bit_width = x.size()
+    
+    # Convert the bit-vector to its binary representation
+    binary_str = format(x.as_long() & ((1 << bit_width) - 1), f'0{bit_width}b')
+    
+    # Count the number of '1's in the binary string
+    return binary_str.count('1')
 
 
 def check_count():
