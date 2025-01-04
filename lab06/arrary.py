@@ -52,7 +52,8 @@ def array_non_linear_proof():
     solver = Solver()
     
     # your src here
-    raise NotImplementedError('TODO: Your code here!') 
+    # raise NotImplementedError('TODO: Your code here!') 
+    solver.add(Select(Store(array, index*index - index*index, value), 0) >= value)
     
     result = solver.check()
     if result == sat:
