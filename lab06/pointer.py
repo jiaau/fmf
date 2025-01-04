@@ -205,15 +205,45 @@ def count_stars(prop: Prop):
     
     def term_count_stars(term: Term):
         # your src here
-        raise NotImplementedError('TODO: Your code here!') 
+        # raise NotImplementedError('TODO: Your code here!') 
+        if isinstance(term, TVar):
+            return 0
+        elif isinstance(term, TAddE):
+            return term_count_stars(term.term) + expr_count_stars(term.expr)
+        elif isinstance(term, TAddr):
+            return 0
+        elif isinstance(term, TAddrStar):
+            return term_count_stars(term.term) + 1
+        elif isinstance(term, TStar):
+            return term_count_stars(term.term) + 1
+        elif isinstance(term, TNull):
+            return 0
 
     def expr_count_stars(expr: Expr):
         # your src here
-        raise NotImplementedError('TODO: Your code here!') 
+        # raise NotImplementedError('TODO: Your code here!') 
+        if isinstance(expr, EVar):
+            return 0
+        elif isinstance(expr, EConst):
+            return 0
+        elif isinstance(expr, EAdd):
+            return expr_count_stars(expr.left) + expr_count_stars(expr.right)
+        elif isinstance(expr, EMinus):
+            return expr_count_stars(expr.left) + expr_count_stars(expr.right)
+        elif isinstance(expr, EStar):
+            return term_count_stars(expr.term) + 1
 
     def rel_count_stars(rel: Relation):
         # your src here
-        raise NotImplementedError('TODO: Your code here!') 
+        # raise NotImplementedError('TODO: Your code here!') 
+        if isinstance(rel, RTEq):
+            return term_count_stars(rel.left) + term_count_stars(rel.right)
+        elif isinstance(rel, RTLe):
+            return term_count_stars(rel.left) + term_count_stars(rel.right)
+        elif isinstance(rel, REEq):
+            return expr_count_stars(rel.left) + expr_count_stars(rel.right)
+        elif isinstance(rel, RELe):
+            return expr_count_stars(rel.left) + expr_count_stars(rel.right)
 
     match prop:
         case PRel(rel) | PNot(rel):
