@@ -267,7 +267,19 @@ def to_z3(prop: Prop):
         # ⟦NULL⟧   =   0
         #
         # your src here
-        raise NotImplementedError('TODO: Your code here!') 
+        # raise NotImplementedError('TODO: Your code here!') 
+        if isinstance(term, TVar):
+            return H(S(Int(term.name)))
+        elif isinstance(term, TAddE):
+            return term_to_z3(term.term) + expr_to_z3(term.expr)
+        elif isinstance(term, TAddr):
+            return S(Int(term.var.name))
+        elif isinstance(term, TAddrStar):
+            return term_to_z3(term.term)
+        elif isinstance(term, TStar):
+            return H(term_to_z3(term.term))
+        elif isinstance(term, TNull):
+            return 0
 
     def expr_to_z3(expr: Expr):
         # rules to eliminate an expression E
@@ -279,7 +291,17 @@ def to_z3(prop: Prop):
         # ⟦*T⟧     =   H(⟦T⟧)
         #
         # your src here
-        raise NotImplementedError('TODO: Your code here!') 
+        # raise NotImplementedError('TODO: Your code here!') 
+        if isinstance(expr, EVar):
+            return H(S(Int(expr.name)))
+        elif isinstance(expr, EConst):
+            return expr.value
+        elif isinstance(expr, EAdd):
+            return expr_to_z3(expr.left) + expr_to_z3(expr.right)
+        elif isinstance(expr, EMinus):
+            return expr_to_z3(expr.left) - expr_to_z3(expr.right)
+        elif isinstance(expr, EStar):
+            return H(term_to_z3(expr.term))
 
     def relation_to_z3(rel: Relation):
         # rules to eliminate a relation R
@@ -290,7 +312,15 @@ def to_z3(prop: Prop):
         # ⟦E < E⟧   =   ⟦E⟧ < ⟦E⟧
         #
         # your src here
-        raise NotImplementedError('TODO: Your code here!') 
+        # raise NotImplementedError('TODO: Your code here!') 
+        if isinstance(rel, RTEq):
+            return term_to_z3(rel.left) == term_to_z3(rel.right)
+        elif isinstance(rel, RTLe):
+            return term_to_z3(rel.left) < term_to_z3(rel.right)
+        elif isinstance(rel, REEq):
+            return expr_to_z3(rel.left) == expr_to_z3(rel.right)
+        elif isinstance(rel, RELe):
+            return expr_to_z3(rel.left) < expr_to_z3(rel.right)
 
     # rules to eliminate a proposition P
     #
