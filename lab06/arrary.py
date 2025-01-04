@@ -87,7 +87,8 @@ def lambda_array():
     def array_store(array, index, element):
         # @Exercise 16: write src to store an "element" into the
         # "index" position of "array" by using lambda expression.
-        raise NotImplementedError('TODO: Your code here!') 
+        # raise NotImplementedError('TODO: Your code here!') 
+        return lambda x: element if x == index else array(x)
 
     # a small test case
     arr = array_new()
